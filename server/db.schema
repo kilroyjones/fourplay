@@ -1,0 +1,18 @@
+CREATE TABLE game(
+    board TEXT,
+    year INTEGER,
+    month INTEGER,
+    day INTEGER
+);
+
+CREATE TABLE played_games (
+    year INTEGER,
+    month INTEGER,
+    day INTEGER,
+    player1 TEXT,
+    player2 TEXT,
+    player3 TEXT,
+    player4 TEXT,
+    score INTEGER 
+);
+
