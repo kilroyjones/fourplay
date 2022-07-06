@@ -57,7 +57,6 @@ impl Database {
     pub fn update_day(&mut self, ctx: &mut Context<Self>) {
         debug!("Starting the stuff");
         ctx.run_interval(Duration::from_secs(60), |act, ctx| {
-            debug!("Testing...");
             let current_date = chrono::Utc::now();
             let day = current_date.day();
             if day != act.day {

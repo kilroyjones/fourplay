@@ -109,21 +109,6 @@
   <Game />
 {/if}
 
-<!-- <Finish
-  words={[
-    "test",
-    "test",
-    "teasda",
-    "teasdf",
-    "teasdf",
-    "teasdf",
-    "teasdf",
-    "teasdf",
-    "teasdf",
-    "teast",
-  ]}
-  score={145}
-/> -->
 <style>
   a,
   a:active {

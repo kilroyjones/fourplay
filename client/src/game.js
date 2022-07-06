@@ -1,5 +1,6 @@
 import { writable, get } from "svelte/store";
-import { getQuadrant, getStartingBoard } from "./boardHelpers";
+import { getQuadrant, updateBoard } from "./boardHelpers";
+import { getStartingBoard } from "./createBoard";
 
 export const gameState = writable("disconnected");
 export const boardUpdate = writable([]);
@@ -15,8 +16,7 @@ export const finalScore = writable();
 export const userCount = writable(0);
 export const gameTimerStart = writable();
 export const gameTimerProgress = writable();
-// export const connectionUrl = writable("localhost:3080");
-export const connectionUrl = writable("fourplay.fun");
+export const connectionUrl = writable("localhost:3080");
 
 let socket = null;
 
@@ -55,36 +55,6 @@ function startGame(op, data) {
   setInterval(runTimer, 200);
 }
 
-function getSwap(row, col, currentRow, currentCol) {
-  if (Math.abs(row - currentRow) == 1 && col == currentCol) {
-    return ["flipVerticalCurrent", "flipVerticalPrevious"];
-  } else if (row == currentRow && Math.abs(col - currentCol) == 1) {
-    return ["flipHorizontalCurrent", "flipHorizontalPrevious"];
-  }
-  return "none";
-}
-
-export function setAnimations(currentBoard, row1, col1, row2, col2) {
-  let idx1 = row1 * 8 + col1;
-  let idx2 = row2 * 8 + col2;
-  let swap = getSwap(row1, col1, row2, col2);
-  currentBoard[idx1].animationDirection = swap[0];
-  currentBoard[idx2].animationDirection = swap[1];
-  return currentBoard;
-}
-
-function updateBoard(data, currentBoard) {
-  let newBoard = data.board;
-  for (let i = 0; i < newBoard.length; i++) {
-    currentBoard[i].letter = newBoard[i];
-  }
-
-  if (getQuadrant(data.row1, data.col1) != get(quadrant)) {
-    currentBoard = setAnimations(currentBoard, data.row1, data.col1, data.row2, data.col2);
-  }
-  return currentBoard;
-}
-
 function selectCell(data) {
   let row = data.row;
   let col = data.col;
@@ -114,9 +84,8 @@ export function finishGame(op, data) {
 }
 
 export function connectServer() {
-  // let connectString = "ws://" + get(connectionUrl) + `/connect?user=${get(username)}`;
-  let connectString = "wss://" + get(connectionUrl) + `/connect?user=${get(username)}`;
-  gameState.set("waiting");
+  let connectString = "ws://" + get(connectionUrl) + `/connect?user=${get(username)}`;
+  // let connectString = "wss://" + get(connectionUrl) + `/connect?user=${get(username)}`;
   socket = new WebSocket(connectString);
 
   socket.addEventListener("open", function (event) {
@@ -146,7 +115,7 @@ export function connectServer() {
           startGame(op, data);
           break;
         case "update-board-on-swap":
-          board.set(updateBoard(data, get(board)));
+          board.set(updateBoard(data, get(board), get(quadrant)));
           break;
         case "user-count":
           userCount.set(data["count"]);
@@ -159,7 +128,6 @@ export function connectServer() {
   });
 }
 
-// Connection opened
 export const sendMessage = message => {
   if (socket.readyState <= 1) {
     socket.send(message);

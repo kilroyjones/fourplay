@@ -29,7 +29,9 @@ impl Handler<GameLeave> for Game {
     type Result = ();
     fn handle(&mut self, msg: GameLeave, ctx: &mut Context<Self>) {
         debug!("User leaving game {}: {}", self.id, &msg.user_id);
-        self.remove_user(msg.user_id);
+        if !self.is_started {
+            self.remove_user(msg.user_id);
+        }
         if !self.is_started && self.users.len() == 0 {
             debug!("Game is ending {}", self.id);
             self.abort_game(ctx);

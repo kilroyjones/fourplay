@@ -58,10 +58,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         let cors = Cors::default()
-            .allowed_origin("https://www.fourplay.fun/")
-            .allowed_origin_fn(|origin, _req_head| origin.as_bytes().ends_with(b"fourplay.fun"))
-            .allowed_origin("http://websocket")
-            // .allow_any_origin()
+            .allow_any_origin()
             .allow_any_method()
             .allow_any_header()
             .max_age(3600);

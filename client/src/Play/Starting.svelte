@@ -1,11 +1,3 @@
-<script>
-  import { setGameState } from "../game.js";
-
-  function startGame() {
-    setGameState("start-game");
-  }
-</script>
-
 <div class="centered-container">
   <img class="logo" src="./images/logo_new.png" alt="log" />
   <div class="title">Game is starting soon!</div>

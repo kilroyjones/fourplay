@@ -162,20 +162,20 @@ impl Game {
         self.game_start_time = Instant::now();
         ctx.run_later(Duration::from_secs(93), |act, ctx| {
             debug!("Game has finished: {} {}", act.id, act.is_started);
-            if act.users.len() == 4 {
-                let game_result = act.calculate_score();
-                act.database.do_send(DatabaseAddGame {
-                    game_id: act.id,
-                    player1: act.users[0].username.clone(),
-                    player2: act.users[1].username.clone(),
-                    player3: act.users[2].username.clone(),
-                    player4: act.users[3].username.clone(),
-                    score: act.score,
-                });
-                act.broadcast("finish-game".into(), game_result.clone());
-                act.server.do_send(ServerEndGame { game_id: act.id });
-                ctx.stop();
-            }
+            let game_result = act.calculate_score();
+            act.database.do_send(DatabaseAddGame {
+                game_id: act.id,
+                player1: act.users[0].username.clone(),
+                player2: act.users[1].username.clone(),
+                player3: act.users[2].username.clone(),
+                player4: act.users[3].username.clone(),
+                score: act.score,
+            });
+            act.broadcast("finish-game".into(), game_result.clone());
+            debug!("Sending end game message");
+            act.server.do_send(ServerEndGame { game_id: act.id });
+            debug!("Sending end game message");
+            ctx.stop();
         });
     }
     pub fn remove_user(&mut self, id: Uuid) {

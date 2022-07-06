@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { connectionUrl } from "../game";
   import WinnerListing from "./WinnerListing.svelte";
+
   export let size;
   let today = [];
   let yesterday = [];

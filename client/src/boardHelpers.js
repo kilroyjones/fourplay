@@ -1,19 +1,3 @@
-class Square {
-  constructor(id, row, col, x, y, quadrant, color, size, letter) {
-    this.id = id;
-    this.row = row;
-    this.col = col;
-    this.x = x;
-    this.y = y;
-    this.quadrant = quadrant;
-    this.color = color;
-    this.size = size;
-    this.letter = letter;
-    this.selected = false;
-    this.animationDirection = "none";
-  }
-}
-
 export function getQuadrant(row, col) {
   if (row < 4 && col < 4) {
     return 1;
@@ -26,31 +10,32 @@ export function getQuadrant(row, col) {
   }
 }
 
-export function getStartingBoard(quadrant, data) {
-  let rows = 8;
-  let cols = 8;
-  let size = 50;
-  let buffer = 8;
-  let count = 0;
-  let color = "isNotPlayerQuadrant";
-  let letters = data["board"];
-  let startingBoard = [];
-
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      let letter = letters[count];
-      let x = col * (size + buffer);
-      let y = row * (size + buffer);
-      let currentQuadrant = getQuadrant(row, col);
-      if (currentQuadrant == quadrant) {
-        color = "isPlayerQuadrant";
-      } else {
-        color = "isNotPlayerQuadrant";
-      }
-      let cell = new Square(count, row, col, x, y, currentQuadrant, color, size, letter);
-      startingBoard.push(cell);
-      count += 1;
-    }
+function getSwap(row, col, currentRow, currentCol) {
+  if (Math.abs(row - currentRow) == 1 && col == currentCol) {
+    return ["flipVerticalCurrent", "flipVerticalPrevious"];
+  } else if (row == currentRow && Math.abs(col - currentCol) == 1) {
+    return ["flipHorizontalCurrent", "flipHorizontalPrevious"];
   }
-  return startingBoard;
+  return "none";
+}
+
+function setAnimations(currentBoard, row1, col1, row2, col2, quadrant) {
+  let idx1 = row1 * 8 + col1;
+  let idx2 = row2 * 8 + col2;
+  let swap = getSwap(row1, col1, row2, col2);
+  currentBoard[idx1].animationDirection = swap[0];
+  currentBoard[idx2].animationDirection = swap[1];
+  return currentBoard;
+}
+
+export function updateBoard(data, currentBoard) {
+  let newBoard = data.board;
+  for (let i = 0; i < newBoard.length; i++) {
+    currentBoard[i].letter = newBoard[i];
+  }
+
+  if (getQuadrant(data.row1, data.col1) != quadrant) {
+    currentBoard = setAnimations(currentBoard, data.row1, data.col1, data.row2, data.col2);
+  }
+  return currentBoard;
 }
