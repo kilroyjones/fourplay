@@ -46,6 +46,7 @@ fn get_letter_set() -> Vec<u8> {
     letters.shuffle(&mut rng);
     letters
 }
+
 fn create_board() -> String {
     let mut board = String::new();
     let letter_set = get_letter_set();

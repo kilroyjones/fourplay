@@ -58,7 +58,7 @@ function startGame(op, data) {
 function selectCell(data) {
   let row = data.row;
   let col = data.col;
-  let id = row * 8 + col;
+  let id = row * 8 + col; /*  */
   let selectedQuadrant = getQuadrant(row, col);
   if (selectedQuadrant == get(quadrant)) {
     return;
