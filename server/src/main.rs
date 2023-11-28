@@ -69,7 +69,7 @@ async fn main() -> std::io::Result<()> {
             .service(connect)
             .service(winners)
     })
-    .bind("127.0.0.1:3080")?
+    .bind("0.0.0.0:3080")?
     .run()
     .await
 }
