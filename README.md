@@ -2,9 +2,7 @@
 
 ## Overview
 
-Fourplay is a four player word puzzle game I built as a project to learn a bit more about Rust, Actix and Svelte. I also wanted to learn more about the actor model and try my hand at building something with it. I ended up rebuilding the backend a few times as I figured out better how to structure things, and while the current iteration is just that, an iteration, it works well enough for what it needs to do.
-
-Note: The backend is fairly well structured, in my opinion, but the frontend could use some work. Due to the nature of the project a lot of the heavy lifting is done in the stores, which make it a bit difficult to follow when looking at individual components.
+Fourplay is a four player word puzzle game I built as a project to learn a bit more about Rust, Actix and Svelte. I also wanted to learn more about the actor model and try my hand at building something with it. I ended up reworking the backend a few times as I figured out better how to structure things, and while the current iteration is just that, an iteration, it works well enough for what it needs to do.
 
 ## Getting it to run locally
 

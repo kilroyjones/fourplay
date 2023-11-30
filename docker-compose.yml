@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  server:
+    container_name: "fourplay-server"
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3080:3080"
+    environment:
+      - RUST_LOG=info
+      - DATABASE_URL=sqlite://game.db
+    command: ./target/release/game-server
+    networks:
+      - default
+
+  client:
+    container_name: "fourplay-client"
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    stdin_open: true
+    ports:
+      - "8080:80"
+    networks:
+      - default
+
+networks:
+  default:
